@@ -22,8 +22,10 @@ pipeline {
             steps {
                 script {
                     sh 'docker build -t ssanantonio/practica-cd:${TAG} .'
-                    def myimage = docker.image('ssanantonio/practica-cd:${TAG}')
-                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'ssanantonio-dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) { sh 'docker login -u "$USERNAME" -p "$PASSWORD"' myimage.push() }
+                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'ssanantonio-dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) { 
+                        sh 'docker login -u "$USERNAME" -p "$PASSWORD"'
+                        sh 'docker push ssanantonio/practica-cd' 
+                        }
                 }
             }
 
