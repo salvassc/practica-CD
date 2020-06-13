@@ -11,12 +11,22 @@ pipeline {
                 sh "mvn clean package -DskipTests"
             }
         }
-        stage("Deploy nexus"){
+        stage("Deploy nexus") {
             steps {
                 script {
                     nexusPublisher nexusInstanceId: 'localNexus', nexusRepositoryId: 'mvn-releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: 'target/practica-CD-${TAG}.jar']], mavenCoordinate: [artifactId: 'practica-CI', groupId: 'es.urjc.code', packaging: 'jar', version: '${TAG}']]]
                 }
             }
+        }
+        stage("Publish Docker image") {
+            steps {
+                script {
+                    sh 'docker build -t ssanantonio/practica-cd:${TAG} .'
+                    def myimage = docker.image('ssanantonio/practica-cd:${TAG}')
+                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'ssanantonio-dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) { sh 'docker login -u "$USERNAME" -p "$PASSWORD"' myimage.push() }
+                }
+            }
+
         }
     }
 }
