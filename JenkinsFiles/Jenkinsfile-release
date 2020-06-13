@@ -21,10 +21,10 @@ pipeline {
         stage("Publish Docker image") {
             steps {
                 script {
-                    sh 'docker build -t ssanantonio/practica-cd:${TAG} .'
+                    sh 'docker build -t ssanantonio/practica_cd:${TAG} .'
                     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'ssanantonio-dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) { 
                         sh 'docker login -u "$USERNAME" -p "$PASSWORD"'
-                        sh 'docker push ssanantonio/practica-cd' 
+                        sh 'docker push ssanantonio/practica_cd' 
                         }
                 }
             }
