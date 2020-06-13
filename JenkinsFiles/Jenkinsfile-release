@@ -31,7 +31,6 @@ pipeline {
         }
         stage("Deploy k8s") {
             steps {
-                sh 'cat k8s.yaml | sed "s/{{TAG}}/${TAG}/g" '
                 sh 'cat k8s.yaml | sed "s/{{TAG}}/${TAG}/g" | microk8s.kubectl apply -f - '
                 sh 'microk8s.kubectl get service practica-cd'
             }
