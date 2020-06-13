@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: practica-cd
-        image: ssanantonio/practica-cd:1.0.0
+        image: ssanantonio/practica_cd:{{TAG}}
 ---
 apiVersion: v1
 kind: Service
