@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: practica-cd
+spec:
+  selector:
+    matchLabels:
+      app: practica-cd
+  template:
+    metadata:
+      labels:
+        app: practica-cd
+    spec:
+      containers:
+      - name: practica-cd
+        image: ssanantonio/practica-cd:1.0.0
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: practica-cd
+  labels:
+    app: practica-cd
+spec:
+  selector:
+    app: practica-cd
+  ports:
+  - port: 8080
+  type: LoadBalancer
