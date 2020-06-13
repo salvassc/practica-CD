@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>es.urjc.code</groupId>
-	<artifactId>practica-CI</artifactId>
+	<artifactId>practica-CD</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -87,5 +87,14 @@
 			<url>http://localhost:8081/repository/mvn-releases/</url>
 		</repository>
 	</distributionManagement>
+
+	<build>
+	 	<plugins>
+  		<plugin>
+   			<groupId>org.springframework.boot</groupId>
+   			<artifactId>spring-boot-maven-plugin</artifactId>
+  		</plugin>
+ 		</plugins>
+	</build>
 
 </project>
