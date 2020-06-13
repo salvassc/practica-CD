@@ -26,4 +26,4 @@ spec:
     app: practica-cd
   ports:
   - port: 8080
-  type: LoadBalancer
+  type: NodePort
