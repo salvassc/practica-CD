@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+    stages {
+        stage("Build project") {
+            steps {
+                sh "mvn clean package -DskipTests"
+            }
+        }
+        stage("Unitary Test") {
+            steps {
+                sh "mvn -Dtest=UnitaryTest test"
+            }
+        }
+    }
+    post {
+        always {
+            junit "target/surefire-reports/TEST-*.xml"
+        }
+        success {
+            archiveArtifacts "target/*.jar"
+        }
+    }
+}

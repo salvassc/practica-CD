@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+    stages {
+        stage("Build project") {
+            steps {
+                sh "mvn clean package -DskipTests"
+            }
+        }
+        stage("Unitary Test") {
+            steps {
+                sh "mvn -Dtest=UnitaryTest test"
+            }
+        }
+        stage("E2E Test") {
+            steps {
+                sh "mvn -Dtest=SeleniumTest test"
+            }
+        }
+        stage("Code quality"){
+            steps {
+                sh "mvn verify -DskipTests sonar:sonar"
+            }
+        }
+        stage("Deploy nexus"){
+            steps {
+                script {
+                    nexusPublisher nexusInstanceId: 'localNexus', nexusRepositoryId: 'mvn-snapshots', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: 'target/practica-CI-0.0.1-SNAPSHOT.jar']], mavenCoordinate: [artifactId: 'practica-CI', groupId: 'es.urjc.code', packaging: 'jar', version: '0.0.1-nightly']]]
+                }          
+            }
+        }
+    }
+    post {
+        always {
+            junit "target/surefire-reports/TEST-*.xml"
+        }
+    }
+}

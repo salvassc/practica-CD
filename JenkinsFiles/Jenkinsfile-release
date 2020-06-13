@@ -1,0 +1,22 @@
+pipeline {
+    agent any
+    stages {
+        stage ('Tag repository') {
+            steps {
+                sh './changeVersion.sh ${TAG} pom.xml'
+            }
+        }
+        stage("Build project") {
+            steps {
+                sh "mvn clean package -DskipTests"
+            }
+        }
+        stage("Deploy nexus"){
+            steps {
+                script {
+                    nexusPublisher nexusInstanceId: 'localNexus', nexusRepositoryId: 'mvn-releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: 'target/practica-CI-${TAG}.jar']], mavenCoordinate: [artifactId: 'practica-CI', groupId: 'es.urjc.code', packaging: 'jar', version: '${TAG}']]]
+                }
+            }
+        }
+    }
+}
